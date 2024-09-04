@@ -1,0 +1,86 @@
+`timescale 1ns / 1ps
+
+////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer:
+//
+// Create Date:   20:21:21 09/17/2019
+// Design Name:   top
+// Module Name:   E:/UTN/Academico/TD1/Verilog/FFD/Top_VTB.v
+// Project Name:  FFD
+// Target Device:  
+// Tool versions:  
+// Description: 
+//
+// Verilog Test Fixture created by ISE for module: top
+//
+// Dependencies:
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+////////////////////////////////////////////////////////////////////////////////
+
+module Top_VTB;
+
+	// Inputs
+	reg clk;
+	reg Din;
+	reg r_0;
+
+	// Outputs
+	wire Dout_0;
+	wire Dout_1;
+	wire Dout_2;
+
+	// Instantiate the Unit Under Test (UUT)
+	top uut (
+		.clk(clk), 
+		.Din(Din),
+		.r_0,
+		.Dout_0(Dout_0), 
+		.Dout_1(Dout_1), 
+		.Dout_2(Dout_2)
+	);
+
+
+  parameter PERIOD = 50;
+
+   always begin
+      clk = 1'b0;
+      #(PERIOD/2) clk = 1'b1;
+      #(PERIOD/2);
+   end  
+				
+				
+	initial begin
+		// Initialize Inputs
+		clk = 0;
+		Din = 0;
+		r_0 = 0;
+
+		// Wait 100 ns for global reset to finish
+		#100;
+        
+		// Add stimulus here
+		
+		Din = 1;
+		#300;
+		
+		r_0 = 1;
+		#40
+		r_0 = 0;
+		
+		#300
+		
+		Din = 0;
+		#200;
+		
+		Din = 1;
+		#200;
+
+	end
+      
+endmodule
+

@@ -1,0 +1,65 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date:    19:37:27 09/17/2019 
+// Design Name: 
+// Module Name:    top 
+// Project Name: 
+// Target Devices: 
+// Tool versions: 
+// Description: 
+//
+// Dependencies: 
+//
+// Revision: 
+// Revision 0.01 - File Created
+// Additional Comments: 
+//
+//////////////////////////////////////////////////////////////////////////////////
+module top(
+    input clk,
+    input Din,
+	 input r_0,
+  
+
+    output Dout_0,
+    output Dout_1,
+    output Dout_2
+	 
+    );
+
+	wire sD0;
+	wire sD1;
+	wire sD2;
+
+// Instantiate the module
+FFD instance_name_1 (
+    .clk(clk), 
+    .Din(Din),
+	 .r(r_0),
+    .Dout(sD0)
+    );
+
+FFD instance_name_2 (
+    .clk(clk), 
+    .Din(Dout_0), 
+	 .r(r_0),
+    .Dout(sD1)
+    );
+
+FFD instance_name_3 (
+    .clk(clk), 
+    .Din(sD1),
+	 .r(r_0),
+    .Dout(sD2)
+    );
+
+
+	assign	Dout_0=sD0;
+	assign	Dout_1=sD1;
+	assign	Dout_2=sD2;
+
+
+endmodule

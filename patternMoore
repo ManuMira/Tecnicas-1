@@ -1,0 +1,56 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date:    17:13:44 09/19/2024 
+// Design Name: 
+// Module Name:    patternMoore 
+// Project Name: 
+// Target Devices: 
+// Tool versions: 
+// Description: 
+//
+// Dependencies: 
+//
+// Revision: 
+// Revision 0.01 - File Created
+// Additional Comments: 
+//
+//////////////////////////////////////////////////////////////////////////////////
+module patternMoore(
+    input clk,
+    input reset,
+    input a,
+    output y
+    );
+	 
+	 reg [1:0] state, nextstate;
+	 
+	 parameter S0 = 2'b00;
+	 parameter S1 = 2'b01;
+	 parameter S2 = 2'b10;
+
+	//State register 
+	 always @ (posedge clk, posedge reset)
+		if(reset) state <= S0;
+			else state <= nextstate;
+	//next state logic
+	always @(*)
+	case(state)
+		
+		S0:if(a) nextstate = S0;
+			else nextstate = S1;
+		
+		S1:if(a) nextstate = S2;
+			else nextstate = S1;
+		
+		S2:if(a) nextstate = S0;
+			else nextstate = S1;
+		default: nextstate = S0;
+	endcase
+	
+	//output logic
+	assign y = (state == S2);
+
+endmodule

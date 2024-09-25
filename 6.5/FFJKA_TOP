@@ -1,0 +1,43 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date:    13:02:29 09/25/2024 
+// Design Name: 
+// Module Name:    FFJKA_TOP 
+// Project Name: 
+// Target Devices: 
+// Tool versions: 
+// Description: 
+//
+// Dependencies: 
+//
+// Revision: 
+// Revision 0.01 - File Created
+// Additional Comments: 
+//
+//////////////////////////////////////////////////////////////////////////////////
+module FFJKA_TOP(
+    input wire clk,
+    input wire reset,  // reset asíncrono
+    input wire j,
+    input wire k,
+    output reg q
+);
+
+always @(posedge clk or posedge reset) begin
+    if (reset) 
+        q <= 0;  // reset asíncrono
+    else begin
+        case ({j, k})
+            2'b00: q <= q;      // No cambio
+            2'b01: q <= 0;      // Reset
+            2'b10: q <= 1;      // Set
+            2'b11: q <= ~q;     // Toggle
+        endcase
+    end
+end
+
+endmodule
+

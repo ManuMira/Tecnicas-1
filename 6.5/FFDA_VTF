@@ -1,0 +1,67 @@
+`timescale 1ns / 1ps
+
+////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer:
+//
+// Create Date:   13:15:11 09/25/2024
+// Design Name:   FFDA_TOP
+// Module Name:   /home/ise/Desktop/FFDA/FFDA_VTF.v
+// Project Name:  FFDA
+// Target Device:  
+// Tool versions:  
+// Description: 
+//
+// Verilog Test Fixture created by ISE for module: FFDA_TOP
+//
+// Dependencies:
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+////////////////////////////////////////////////////////////////////////////////
+
+module FFDA_VTF;
+
+	// Inputs
+	reg clk;
+	reg reset;
+	reg enable;
+	reg d;
+
+	// Outputs
+	wire q;
+
+	// Instantiate the Unit Under Test (UUT)
+	FFDA_TOP uut (
+		.clk(clk), 
+		.reset(reset), 
+		.enable(enable), 
+		.d(d), 
+		.q(q)
+	);
+	    // Generar el reloj
+    always #5 clk = ~clk;
+
+	initial begin
+		// Initialize Inputs
+		clk = 0;
+		reset = 0;
+		enable = 0;
+		d = 0;
+
+		// Wait 100 ns for global reset to finish
+		#100;
+        
+		// Add stimulus here
+		// Simulación
+        #10 reset = 1;  // Aplicar reset asíncrono
+        #10 reset = 0; enable = 1; d = 1;  // Activar latch y setear D
+        #10 enable = 0;  // Desactivar latch
+        #10 enable = 1; d = 0;  // Cambiar valor de D
+        #10 $finish;
+    end
+      
+endmodule
+

@@ -1,0 +1,72 @@
+`timescale 1ns / 1ps
+
+////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer:
+//
+// Create Date:   13:11:16 09/25/2024
+// Design Name:   FFJKS_TO
+// Module Name:   /home/ise/Desktop/FFJKS/FFJKS_VTF.v
+// Project Name:  FFJKS
+// Target Device:  
+// Tool versions:  
+// Description: 
+//
+// Verilog Test Fixture created by ISE for module: FFJKS_TO
+//
+// Dependencies:
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+////////////////////////////////////////////////////////////////////////////////
+
+module FFJKS_VTF;
+
+	// Inputs
+	reg clk;
+	reg reset;
+	reg j;
+	reg k;
+
+	// Outputs
+	wire q;
+
+	// Instantiate the Unit Under Test (UUT)
+	FFJKS_TO uut (
+		.clk(clk), 
+		.reset(reset), 
+		.j(j), 
+		.k(k), 
+		.q(q)
+	);
+	  parameter PERIOD = 5;
+
+   always begin
+      clk = 1'b0;
+      #(PERIOD/2) clk = 1'b1;
+      #(PERIOD/2);
+   end  
+		
+	initial begin
+		// Initialize Inputs
+		clk = 0;
+		reset = 0;
+		j = 0;
+		k = 0;
+
+		// Wait 100 ns for global reset to finish
+		#100;
+        
+		// Add stimulus here
+		// Simulación
+        #10 reset = 1;  // Aplicar reset síncrono
+        #10 reset = 0; j = 1; k = 0;  // Set
+        #10 j = 0; k = 1;  // Reset
+        #10 j = 1; k = 1;  // Toggle
+        #10 $finish;
+	end
+      
+endmodule
+

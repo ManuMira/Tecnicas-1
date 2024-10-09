@@ -1,0 +1,73 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date:    15:44:53 10/09/2024 
+// Design Name: 
+// Module Name:    FFJK 
+// Project Name: 
+// Target Devices: 
+// Tool versions: 
+// Description: 
+//
+// Dependencies: 
+//
+// Revision: 
+// Revision 0.01 - File Created
+// Additional Comments: 
+//
+//////////////////////////////////////////////////////////////////////////////////
+module FFJK(
+    input X,
+    input clk,
+    input reset,
+    output reg Salida
+    );
+	 
+	parameter S0 = 2'b00;
+   parameter S1 = 2'b01;
+   parameter S2 = 2'b10;
+   parameter S3 = 2'b11;
+
+   (* FSM_ENCODING="SEQUENTIAL", SAFE_IMPLEMENTATION="NO" *) reg [1:0] state = S0;
+
+   always@(posedge clk)
+      if (reset) begin
+         state <= S0;
+         Salida <= 0;
+      end
+      else
+         (* FULL_CASE, PARALLEL_CASE *) case (state)
+            S0 : begin
+               if (x == 0)
+                  state <= S1;
+               else
+                  state <= S0;
+               Salida <= 0;
+            end
+            S1 : begin
+               if (x == 0)
+                  state <= S3;
+					else
+                  state <= S2;
+               Salida <= 1;
+            end
+            S2 : begin
+               if (x == 0)
+                  state <= S3;
+               else
+                  state <= S2;
+               Salida <= 1;
+            end
+            S3 : begin
+               if (x == 0)
+                  state <= S0;
+               else
+                  state <= S3;
+               Salida <= 0;
+            end
+         endcase
+							
+
+endmodule

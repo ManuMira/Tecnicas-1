@@ -1,0 +1,76 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date:    15:52:34 10/14/2024 
+// Design Name: 
+// Module Name:    Monta2 
+// Project Name: 
+// Target Devices: 
+// Tool versions: 
+// Description: 
+//
+// Dependencies: 
+//
+// Revision: 
+// Revision 0.01 - File Created
+// Additional Comments: 
+//
+//////////////////////////////////////////////////////////////////////////////////
+module Monta2(
+	 input reset,clk,
+    input P1,
+    input P2,
+    input C1,
+    input C2,
+    output reg eng
+    );
+
+
+   parameter S0 = 2'b00;
+   parameter S1 = 2'b01;
+   parameter S2 = 2'b10;
+   parameter S3 = 2'b11;
+
+   (* FSM_ENCODING="SEQUENTIAL", SAFE_IMPLEMENTATION="NO" *) reg [1:0] state = S0;
+
+   always@(posedge clk)
+      if (reset) begin
+         state <= S0;
+         eng <= 00;
+      end
+      else
+         (* FULL_CASE, PARALLEL_CASE *) case (state)
+            S0 : begin
+               if (P2 == 1)
+                  state <= S1;
+               else
+                  state <= S0;
+               eng <= 2'b01;
+            end
+            S1 : begin
+               if (C2 == 1)
+                  state <= S2;
+               else
+                  state <= S1;
+               eng <= 2'b00;
+            end
+            S2 : begin
+               if (P1 == 1)
+                  state <= S3;
+               else
+                  state <= S2;
+               eng <= 2'b10;
+            end
+            S3 : begin
+               if (C1 == 1)
+                  state <= S0;
+               else
+                  state <= S3;
+               eng <= 2'b00;
+            end
+         endcase
+							
+
+endmodule

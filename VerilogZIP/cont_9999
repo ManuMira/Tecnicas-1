@@ -1,0 +1,151 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: Ing. Marcelo Casasnovas
+// 
+// Create Date:    18:37:17 10/17/2023 
+// Design Name: 
+// Module Name:    cont_0_99 
+// Project Name: 
+// Target Devices: 
+// Tool versions: 
+// Description: Contador de 0 a 99
+//
+// Dependencies: 
+//
+// Revision: 
+// Revision 0.01 - File Created
+// Additional Comments: 
+//
+//////////////////////////////////////////////////////////////////////////////////
+module cont_0_9999(
+  input clock,
+    input reset,
+    output a,
+    output b,
+    output c,
+    output d,
+    output e,
+    output f,
+    output g,
+    output dp,
+    output [3:0]an
+    );
+  
+reg [3:0]primero; //registro el primer dígito
+reg [3:0]segundo; //registro el segundo dígito
+reg [3:0]tercero; //registro el tercero dígito
+reg [3:0]cuarto; //registro el cuarto dígito
+
+reg [22:0] delay; //registro para producir un retardo de 0.1 segundo
+wire test;
+
+always @ (posedge clock or posedge reset)
+ begin
+  if (reset)
+   delay <= 0;
+  else
+   delay <= delay + 1;
+ end
+ 
+assign test = &delay; //AND en cada bit del retardo con sigo mismo; test estará en alto solo cuando todos los bits del retardo estén en alto
+
+
+always @ (posedge test or posedge reset)
+ begin
+  if (reset) begin
+   primero <= 0;
+   segundo <= 0;
+	tercero <= 0;
+	cuarto <= 0;
+  end
+   else if (primero == 4'd9) begin  //x9 alcanzado
+    primero <= 0;
+     if (segundo == 4'd9) begin //99 alcanzado
+      segundo <= 0;
+		if (tercero == 4'd9) begin //999 alcanzado
+			tercero <= 0;
+			if (cuarto == 4'd9) begin //9999 alcanzado
+				cuarto <= 0;
+					end
+				else
+					cuarto <= cuarto + 1;
+				end
+			else
+				tercero <= tercero + 1;
+			end
+     else
+       segundo <= segundo + 1;     
+		end
+   else
+    primero <= primero + 1;
+  end
+  
+//Circuito de multiplexado abajo
+
+localparam N = 15;
+
+reg [N-1:0]count;
+
+always @ (posedge clock or posedge reset)
+ begin
+  if (reset)
+   count <= 0;
+  else
+   count <= count + 1;
+ end
+
+reg [6:0]sseg;
+reg [3:0]an_temp;
+always @(*)
+ begin
+  case(count[N-1:N-2])
+   
+   2'b00 : 
+    begin
+     sseg = primero;
+     an_temp = 4'b1110;
+    end
+   
+   2'b01:
+    begin
+     sseg = segundo;
+     an_temp = 4'b1101;
+    end
+   
+   2'b10:
+    begin
+     sseg = tercero; 
+     an_temp = 4'b1011;
+    end
+    
+   2'b11:
+    begin
+     sseg = cuarto; 
+     an_temp = 4'b0111;
+    end
+  endcase
+ end
+assign an = an_temp;
+
+reg [6:0] sseg_temp; 
+always @(*)
+ begin
+  case(sseg)
+   4'd0 : sseg_temp = 7'b1000000; //0
+   4'd1 : sseg_temp = 7'b1111001; //1
+   4'd2 : sseg_temp = 7'b0100100; //2
+   4'd3 : sseg_temp = 7'b0110000; //3
+   4'd4 : sseg_temp = 7'b0011001; //4
+   4'd5 : sseg_temp = 7'b0010010; //5
+   4'd6 : sseg_temp = 7'b0000010; //6
+   4'd7 : sseg_temp = 7'b1111000; //7
+   4'd8 : sseg_temp = 7'b0000000; //8
+   4'd9 : sseg_temp = 7'b0010000; //9
+   default : sseg_temp = 7'b0111111; //dash
+  endcase
+ end
+assign {g, f, e, d, c, b, a} = sseg_temp; 
+assign dp = 1'b1; //no se necesita el dp todos se apagan
+
+endmodule
